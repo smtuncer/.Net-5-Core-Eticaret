@@ -1,0 +1,110 @@
+﻿@page
+@model RegisterModel
+@using ETicaret.Models
+@{
+    ViewData["Title"] = "Register";
+}
+
+
+<!-- admin pss= Selcukt-123 -->
+<div class="row">
+    <div class="col-md-4">
+        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <h4>Kayıt Ol</h4>
+            <hr />
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                Ad
+                <input asp-for="Input.Name" class="form-control" />
+                <span asp-validation-for="Input.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                Soyad
+                <input asp-for="Input.SurName" class="form-control" />
+                <span asp-validation-for="Input.SurName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                Adres
+                <input asp-for="Input.Adres" class="form-control" />
+                <span asp-validation-for="Input.Adres" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                Şehir
+                <input asp-for="Input.Sehir" class="form-control" />
+                <span asp-validation-for="Input.Sehir" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                Semt
+                <input asp-for="Input.Semt" class="form-control" />
+                <span asp-validation-for="Input.Semt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                Posta Kodu
+                <input asp-for="Input.PostaKodu" class="form-control" />
+                <span asp-validation-for="Input.PostaKodu" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                Telefon Numarası
+                <input asp-for="Input.TelefonNo" class="form-control" />
+                <span asp-validation-for="Input.TelefonNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                Email
+                <input asp-for="Input.Email" class="form-control" />
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                Şifre
+                <input asp-for="Input.Password" class="form-control" />
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                Şifre Tekrar
+                <input asp-for="Input.ConfirmPassword" class="form-control" />
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+            @if (User.IsInRole(Diger.Role_Admin))
+            {
+                <div >
+                    @Html.DropDownListFor(m=>m.Input.Role,Model.Input.RoleList,"Rol Seç",new {@class="form-control"})
+                </div>
+                <br />
+            }
+            <button type="submit" class="btn btn-success form-control"><i class="bi bi-person"></i>Üye Ol</button>
+        </form>
+    </div>
+    <div class="col-md-6 col-md-offset-2">
+        <section>
+            <h4>Facebook ya da Google ile Üye Ol</h4>
+            <hr />
+            @{
+                if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                {
+                    <div>
+                        <p>
+                            There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
+                            for details on setting up this ASP.NET application to support logging in via external services.
+                        </p>
+                    </div>
+                }
+                else
+                {
+                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                        <div>
+                            <p>
+                                @foreach (var provider in Model.ExternalLogins)
+                                {
+                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                }
+                            </p>
+                        </div>
+                    </form>
+                }
+            }
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

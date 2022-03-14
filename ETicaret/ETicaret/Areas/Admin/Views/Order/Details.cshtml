@@ -1,0 +1,109 @@
+﻿@model ETicaret.Models.OrderDetailsVM
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form method="post">
+    <input hidden asp-for="orderHeader.id" />
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+
+                <dl class="row">
+
+                    <dt class="col-sm-4">
+                        Adı <br />
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Model.orderHeader.Name
+                    </dd>
+                    <dt class="col-sm-4">
+                        Soyadı <br />
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Model.orderHeader.Surname
+                    </dd>
+                    <dt class="col-sm-4">
+                        Telefon <br />
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Model.orderHeader.PhoneNumber
+                    </dd>
+                    <dt class="col-sm-4">
+                        Adres <br />
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Model.orderHeader.Adres
+                    </dd>
+                    <dt class="col-sm-4">
+                        Semt <br />
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Model.orderHeader.Semt
+                    </dd>
+                    <dt class="col-sm-4">
+                        Şehir <br />
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Model.orderHeader.Şehir
+                    </dd>
+                    <dt class="col-sm-4">
+                        Posta Kodu <br />
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Model.orderHeader.PostaKodu
+                    </dd>
+                    <dt class="col-sm-4">
+                        Sipariş Tarihi <br />
+                    </dt>
+                    <dd class="col-sm-8">
+                        @Model.orderHeader.OrderDate.ToShortDateString()
+                    </dd>
+                </dl>
+            </div>
+            <div class="col-md-6">
+                <div class="col-md-12">
+                    <ul class="list-group mb-3">
+                        @foreach (var item in Model.OrderDetails)
+                        {
+                            <li class="list-group-item d-flex justify-content-between lh-sm">
+                                <div>
+                                    <h6 class="my-0">@item.Product.Title</h6>
+                                    <small class="text-muted">Adet : @item.Count</small>
+                                </div>
+                                <span class="text-muted">@((item.Count*item.Product.Price).ToString("0.00")) ₺</span>
+                            </li>
+                        }
+                        <li class="list-group-item d-flex justify-content-between bg-light">
+                            <div class="text-success">
+                                <h6 class="my-0">Toplam Tutar : </h6>
+                            </div>
+                            <span class="text-success">@(Model.orderHeader.OrderTotal.ToString("0.00")) ₺</span>
+                        </li>
+                    </ul>
+                    @if (User.IsInRole(Diger.Role_Admin))
+                    {
+                        <br />
+                        @if (Model.orderHeader.OrderStatus == Diger.DurumOnaylandi)
+                        {
+                            <input type="submit" value="Kargoya Ver" class="btn btn-primary form-control" formaction="/Admin/Order/KargoyaVer" formmethod="post" />
+                        }
+                        <br />
+                        @if (Model.orderHeader.OrderStatus == Diger.Beklemede)
+                        {
+                            <input type="submit" value="Onayla" class="btn btn-primary form-control" formaction="/Admin/Order/Onaylandi" formmethod="post" />
+                        }
+                    }
+                    else
+                    {
+                        <label class="btn btn-primary form-control" >@Model.orderHeader.OrderStatus</label>
+                    }
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</form>
+
